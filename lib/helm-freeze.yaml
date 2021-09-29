@@ -38,9 +38,8 @@ charts:
     repo_name: prometheus-community
     version: 3.4.2
   - name: loki
-    repo_name: loki
-    version: 0.31.1
-    comment: https://github.com/grafana/loki/tree/master/production/helm
+    repo_name: grafana
+    version: 2.6.0
   - name: promtail
     repo_name: grafana
     version: 3.7.0

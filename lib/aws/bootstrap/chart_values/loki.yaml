@@ -69,5 +69,4 @@ persistence:
   size: 20Gi
   annotations:
     app: loki
-  storageClassName: scw-sbv-ssd-0
   subPath: "loki"
