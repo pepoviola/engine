@@ -13,6 +13,11 @@ use std::path::Path;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DigitalOceanQoveryTerraformConfig {
     pub loki_storage_config_do_space: String,
+    pub loki_storage_config_do_space_access_id: String,
+    pub loki_storage_config_do_space_secret_key: String,
+    pub loki_storage_config_do_space_region: String,
+    pub loki_storage_config_do_space_host: String,
+    pub loki_storage_config_do_space_bucket_name: String,
 }
 
 pub struct ChartsConfigPrerequisites {
@@ -242,12 +247,24 @@ pub fn do_helm_charts(
             values_files: vec![chart_path("chart_values/loki.yaml")],
             values: vec![
                 ChartSetValue {
-                    key: "config.storage_config.aws.s3".to_string(),
-                    value: qovery_terraform_config.loki_storage_config_do_space,
+                    key: "config.storage_config.aws.bucketnames".to_string(),
+                    value: qovery_terraform_config.loki_storage_config_do_space_bucket_name,
                 },
                 ChartSetValue {
-                    key: "config.storage_config.aws.s3forcepathstyle".to_string(),
-                    value: "true".to_string(),
+                    key: "config.storage_config.aws.endpoint".to_string(),
+                    value: qovery_terraform_config.loki_storage_config_do_space_host,
+                },
+                ChartSetValue {
+                    key: "config.storage_config.aws.region".to_string(),
+                    value: qovery_terraform_config.loki_storage_config_do_space_region,
+                },
+                ChartSetValue {
+                    key: "config.storage_config.aws.access_key_id".to_string(),
+                    value: qovery_terraform_config.loki_storage_config_do_space_access_id,
+                },
+                ChartSetValue {
+                    key: "config.storage_config.aws.secret_access_key".to_string(),
+                    value: qovery_terraform_config.loki_storage_config_do_space_secret_key,
                 },
                 // DigitalOcean do not support encryption yet
                 // https://docs.digitalocean.com/reference/api/spaces-api/

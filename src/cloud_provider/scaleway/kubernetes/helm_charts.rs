@@ -129,7 +129,10 @@ pub fn scw_helm_charts(
         get_chart_namespace(prometheus_namespace)
     );
     let loki_namespace = HelmChartNamespaces::Logging;
-    let loki_kube_dns_prefix = format!("http://loki.{}.svc:3100/loki/api/v1/push", get_chart_namespace(loki_namespace));
+    let loki_kube_dns_prefix = format!(
+        "http://loki.{}.svc:3100/loki/api/v1/push",
+        get_chart_namespace(loki_namespace)
+    );
 
     // Qovery storage class
     let q_storage_class = CommonChart {
@@ -241,7 +244,6 @@ pub fn scw_helm_charts(
                     key: "config.storage_config.aws.region".to_string(),
                     value: chart_config_prerequisites.zone.region().to_string(),
                 },
-                // Scaleway do not support encryption yet
                 ChartSetValue {
                     key: "config.storage_config.aws.s3forcepathstyle".to_string(),
                     value: "true".to_string(),
