@@ -12,7 +12,6 @@ use std::path::Path;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DigitalOceanQoveryTerraformConfig {
-    pub loki_storage_config_do_space: String,
     pub loki_storage_config_do_space_access_id: String,
     pub loki_storage_config_do_space_secret_key: String,
     pub loki_storage_config_do_space_region: String,
@@ -142,7 +141,10 @@ pub fn do_helm_charts(
         get_chart_namespace(prometheus_namespace)
     );
     let loki_namespace = HelmChartNamespaces::Logging;
-    let loki_kube_dns_prefix = format!("loki.{}.svc", get_chart_namespace(loki_namespace));
+    let loki_kube_dns_prefix = format!(
+        "http://loki.{}.svc:3100/loki/api/v1/push",
+        get_chart_namespace(loki_namespace)
+    );
 
     // Qovery storage class
     let q_storage_class = CommonChart {
@@ -209,7 +211,7 @@ pub fn do_helm_charts(
             namespace: HelmChartNamespaces::KubeSystem,
             values: vec![
                 ChartSetValue {
-                    key: "loki.serviceName".to_string(),
+                    key: "config.lokiAddress".to_string(),
                     value: loki_kube_dns_prefix.clone(),
                 },
                 // it's mandatory to get this class to ensure paused infra will behave properly on restore
@@ -247,6 +249,10 @@ pub fn do_helm_charts(
             values_files: vec![chart_path("chart_values/loki.yaml")],
             values: vec![
                 ChartSetValue {
+                    key: "config.storage_config.aws.s3forcepathstyle".to_string(),
+                    value: "true".to_string(),
+                },
+                ChartSetValue {
                     key: "config.storage_config.aws.bucketnames".to_string(),
                     value: qovery_terraform_config.loki_storage_config_do_space_bucket_name,
                 },
@@ -270,6 +276,10 @@ pub fn do_helm_charts(
                 // https://docs.digitalocean.com/reference/api/spaces-api/
                 ChartSetValue {
                     key: "config.storage_config.aws.sse_encryption".to_string(),
+                    value: "false".to_string(),
+                },
+                ChartSetValue {
+                    key: "config.storage_config.aws.insecure".to_string(),
                     value: "false".to_string(),
                 },
                 // resources limits

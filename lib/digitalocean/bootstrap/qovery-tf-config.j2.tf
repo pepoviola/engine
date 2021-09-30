@@ -1,7 +1,6 @@
 locals {
   qovery_tf_config = <<TF_CONFIG
 {
-  "loki_storage_config_do_space": "s3://${urlencode(var.space_access_id)}:${urlencode(var.space_secret_key)}@${var.region}.digitaloceanspaces.com/{{ object_storage_logs_bucket }}",
   "loki_storage_config_do_space_access_id": "${var.space_access_id}",
   "loki_storage_config_do_space_secret_key": "${var.space_secret_key}",
   "loki_storage_config_do_space_region": "${var.region}",
