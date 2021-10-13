@@ -12,6 +12,13 @@ spec:
     name: qovery-engine
   minReplicas: {{ .Values.autoscaler.min_replicas }}
   maxReplicas: {{ .Values.autoscaler.max_replicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.autoscaler.stabilizationWindowSeconds }}
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: {{ .Values.autoscaler.scaleDownPeriodSeconds }}
   metrics:
     - type: Pods
       pods:
