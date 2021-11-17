@@ -19,7 +19,7 @@ function variable_not_found() {
 
 function stop_gitlab_pipeline() {
   PIPELINE_ID=$1
-  GITLAB_PERSONAL_TOKEN=$1
+  GITLAB_PERSONAL_TOKEN=$2
   echo "Stopping gitlab pipeline ID: $PIPELINE_ID"
   curl -s -H "PRIVATE-TOKEN: $GITLAB_PERSONAL_TOKEN" "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/pipelines/$PIPELINE_ID/cancel"
 }
