@@ -27,7 +27,7 @@ function stop_gitlab_pipeline() {
   PIPELINE_ID=$(cat $pipeline_id_file)
 
   echo "Stopping gitlab pipeline ID: $PIPELINE_ID"
-  curl -s -H "PRIVATE-TOKEN: $GITLAB_PERSONAL_TOKEN" "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/pipelines/$PIPELINE_ID/cancel"
+  curl -s -X POST -H "PRIVATE-TOKEN: $GITLAB_PERSONAL_TOKEN" "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/pipelines/$PIPELINE_ID/cancel"
 }
 
 function release() {
