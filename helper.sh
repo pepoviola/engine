@@ -84,8 +84,8 @@ function run_tests() {
     echo "Pipeline ID is not correct, we expected a number and got: $PIPELINE_ID"
     exit 1
   fi
-  trap "stop_gitlab_pipeline $PIPELINE_ID $GITLAB_PERSONAL_TOKEN" SIGTERM SIGINT
   echo $PIPELINE_ID > $pipeline_id_file
+  trap "stop_gitlab_pipeline" SIGTERM SIGINT
   sleep 2
 
   pipeline_status=''
