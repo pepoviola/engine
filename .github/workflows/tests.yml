@@ -34,4 +34,5 @@ jobs:
           echo "Branch name: $branch"
           export GITHUB_BRANCH=$branch
           export GITHUB_COMMIT_ID=$GITHUB_SHA
+          trap "./helper.sh stop_gitlab_pipeline" SIGTERM SIGINT
           ./helper.sh autodetect
