@@ -132,7 +132,7 @@ function run_tests() {
       ;;
     esac
 
-    sleep 5
+    sleep 3
   done
 
   echo "Results: functional tests failed due to a too high number ($max_unexpected_status) of unexpected status."
