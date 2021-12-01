@@ -12,7 +12,7 @@ use crate::cmd::structs::{
     Configmap, Daemonset, Item, KubernetesEvent, KubernetesJob, KubernetesKind, KubernetesList, KubernetesNode,
     KubernetesPod, KubernetesPodStatusPhase, KubernetesService, KubernetesVersion, LabelsContent, PVC, SVC,
 };
-use crate::cmd::utilities::exec_with_envs_and_output;
+use crate::cmd::utilities::QoveryCommand;
 use crate::constants::KUBECONFIG;
 use crate::error::{SimpleError, SimpleErrorKind};
 
@@ -38,18 +38,13 @@ where
     F: FnMut(Result<String, Error>),
     X: FnMut(Result<String, Error>),
 {
-    if let Err(err) = exec_with_envs_and_output(
-        "kubectl",
-        args.clone(),
-        envs.clone(),
-        stdout_output,
-        stderr_output,
-        Duration::max_value(),
-    ) {
+    let mut cmd = QoveryCommand::new("kubectl", &args, &envs);
+
+    if let Err(err) = cmd.exec_with_timeout(Duration::max_value(), stdout_output, stderr_output) {
         let args_string = args.join(" ");
         let msg = format!("Error on command: kubectl {}. {:?}", args_string, &err);
         error!("{}", &msg);
-        return Err(err);
+        return Err(SimpleError::new(SimpleErrorKind::Other, Some(msg)));
     };
 
     Ok(())
